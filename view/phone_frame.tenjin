@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+  <head>
+    <title>LinkSnap Phone Interface</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0,target-densitydpi=device-dpi" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      
+      html, body {
+        height: 100%;
+      }
+      
+      #mainFrame {
+        border: solid 0px;
+        width: 100%;
+        height: 98%;
+      }
+    </style>
+    <script src='/_ah/channel/jsapi'></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var uname;
+      var token;
+      var init = function(callback) {
+          window.hash = "${hash}";
+          $("#mainFrame").attr("src", "/receiver?hash=" + window.hash);
+          $("#mainFrame").attr("width", "100%");
+          $("#mainFrame").attr("height", "98%");
+          $.getJSON("token?user=" + window.hash, function(data) {
+              window.token = data.token;
+              callback();
+          });
+      }
+      var comet_count = 0;
+      var channel_setup = function() {
+          var channel = new goog.appengine.Channel(window.token);
+          var socket = channel.open();
+          socket.onmessage = function(res) {
+              window.res = res;
+              var data = eval("(" + res.data + ")");
+              $("#mainFrame").attr("src", data.url);
+          };
+          window.socket = socket;
+      };
+      $(function() {
+          init(channel_setup);
+      });
+    </script>
+    <script type="text/javascript">
+      var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-25179241-1']); _gaq.push(['_trackPageview']);
+      (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+  <body>
+    <iframe id="mainFrame" src="" frameborder="0"></iframe>
+    <div id="debug">
+    </div>
+  </body>
+</html>

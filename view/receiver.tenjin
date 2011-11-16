@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+  <head>
+    <title>LinkSnap - PC からスマフォへのリンク渡し</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0,target-densitydpi=device-dpi" />
+    <meta name="description" content="LinkSnap は PC で見ていた Web ページを、スマートフォンへ簡単に送るためのツールです。PC で開いていたページをすぐにスマートフォンで確認したい場合や、複数台のスマートフォンで同時に同じページを確認したい場合などに、ワンクリックで、ページを送ることができます。" />
+    <meta name="keyowrd" content="スマートフォン,リンク,リンク転送,同期,スマートフォン,同期,画面同期,ツール,Webサービス" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      
+      #main {
+        padding: 35px;
+        line-height: 1.5;
+      }
+      
+      .titleDiv {
+        background-color: #0a8594;
+        color: white;
+        text-shadow: -1px -1px 1px #011;
+        padding: 10px;
+        border-radius: 10px;
+        border: solid 0px #000;
+        box-shadow: 3px 3px 3px #000;
+        position: relative;
+        text-align: center;
+        font-size: x-large;
+        font-weight: bold;
+        font-family: "Times New Roman";
+      }
+      
+      .titleDiv a {
+        color: white;
+        text-decoration: none;
+      }
+
+      .width400 {
+        width: 400px;
+      }
+
+      .width200 {
+        width: 200px;
+      }
+      
+      .width150 {
+        width: 150px;
+      }
+      
+      .width100 {
+        width: 100px;
+      }
+      
+      #footer {
+        width: 100%;
+        background-color: #0a8594;
+        height: 45px;
+        line-height: 45px;
+        color: #fff;
+        text-shadow: 1px 1px 1px #000;
+        text-align: center;
+        font-weight: bold;
+        font-size: small;
+        font-family: "Times New Roman";
+        box-shadow: 0px -3px 3px #000;
+      }
+      
+      #footer a {
+        color: #fff;
+        text-decoration: none;
+      }
+      #footer a:hover {
+        color: #fff;
+        text-decoration: underline;
+      }
+      #socialField ul li {
+        float: left;
+        ;
+      }
+      #socialField ul {
+        list-style: none;
+      }
+      .clear {
+        clear: both;
+      }
+    </style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var uname;
+      var init = function(callback) {
+          function getUrlVars(){
+              var vars = [], hash;
+              var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+              for(var i = 0; i < hashes.length; i++) {
+                  hash = hashes[i].split('=');
+                  vars.push(hash[0]);
+                  vars[hash[0]] = hash[1];
+              }
+              return vars;
+          }
+          window.hash = getUrlVars()['hash'];
+          callback();
+      };
+      $(function() {
+          init(function() {
+              $("#bookmarklet").attr(
+                  "href",
+                  "javascript:(function(){var e=document.createElement(%27img%27);e.src=%27http://link-snap.appspot.com/update?hash=" + window.hash + "&url=%27+encodeURIComponent(location.href);alert('待ち受け画面に ' + location.href + ' を送信しました。');})()"
+              );
+              var phoneAddr = "http://link-snap.appspot.com/phone_frame?hash=" + window.hash;
+              $("#phoneFrame").attr(
+                  "href",
+                  phoneAddr
+              );
+              $("#phoneQR").attr(
+                  "src",
+                  "http://chart.apis.google.com/chart?cht=qr&chs=230x230&chl=" + encodeURIComponent(phoneAddr)
+              );
+              $(".snapId").text(window.hash);
+          });
+      })
+    </script>
+    <script type="text/javascript">
+      var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-25179241-1']); _gaq.push(['_trackPageview']);
+      (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="fb-root" style="display: none;"></div>
+    <div id="container">
+      <div id="main">
+        <div class="titleDiv width200">
+          <strong id="title"><a href="/">LinkSnap</a></strong>
+        </div>
+        <br />
+        <br />
+        LinkSnap 待ち受けページへようこそ！<br />
+        <br />
+        PC から URL を送信してください。<br />
+        送信された URL がこの画面に表示されます。<br />
+        <span style="font-size: small; color: #999;">
+          このページの SnapID は <span class="snapId"></span> です。
+        </span>
+        <br />
+        <br />
+        <div id="socialField">
+          <ul>
+            <li><a href="http://twitter.com/share" class="twitter-share-button" data-url="http://link-snap.appspot.com/" data-count="horizontal" data-via="linksnap">Tweet</a></li>
+            <li><fb:like href="http://link-snap.appspot.com/" send="false" layout="button_count" width="90" show_faces="true" action="like" font=""></fb:like></li>
+            <li><g:plusone size="medium" href="http://link-snap.appspot.com/"></g:plusone></li>
+          </ul>
+          <br class="clear"/>
+        </div>
+        <br />
+      </div>
+    </div>
+    <div id="footer">
+      COPYRIGHT (C) 2011 <a href="http://zyyx.jp/">ZYYX INC.</a> ALL RIGHTS RESERVED.
+    </div>
+    <div id="debug">
+    </div>
+    <script src="http://connect.facebook.net/en_US/all.js#appId=147278832023084&amp;xfbml=1"></script>
+    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    <script type="text/javascript">
+      (function() {
+          var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true; po.src = 'https://apis.google.com/js/plusone.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+</script>  </body>
+</html>

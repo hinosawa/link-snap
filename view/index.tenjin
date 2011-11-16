@@ -1,0 +1,263 @@
+<!doctype html>
+<!-- version 2011/08/16 -->
+<html>
+  <head>
+    <title>LinkSnap - PC からスマフォへのリンク渡し</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0,target-densitydpi=device-dpi" />
+    <meta name="description" content="LinkSnap は PC で見ていた Web ページを、スマートフォンへ簡単に送るためのツールです。PC で開いていたページをすぐにスマートフォンで確認したい場合や、複数台のスマートフォンで同時に同じページを確認したい場合などに、ワンクリックで、ページを送ることができます。" />
+    <meta name="keyowrd" content="スマートフォン,リンク,リンク転送,同期,スマートフォン,同期,画面同期,ツール,Webサービス" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      
+      #main {
+        padding: 35px;
+        line-height: 1.5;
+      }
+      
+      .titleDiv {
+        background-color: #0a8594;
+        color: white;
+        text-shadow: -1px -1px 1px #011;
+        padding: 10px;
+        border-radius: 10px;
+        border: solid 0px #000;
+        box-shadow: 3px 3px 3px #000;
+        position: relative;
+        text-align: center;
+        font-size: x-large;
+        font-weight: bold;
+        font-family: "Times New Roman";
+      }
+      
+      .titleDiv a {
+        color: white;
+        text-decoration: none;
+      }
+
+      .width400 {
+        width: 400px;
+      }
+
+      .width200 {
+        width: 200px;
+      }
+      
+      .width150 {
+        width: 150px;
+      }
+      
+      .width100 {
+        width: 100px;
+      }
+      
+      #footer {
+        width: 100%;
+        background-color: #0a8594;
+        height: 45px;
+        line-height: 45px;
+        color: #fff;
+        text-shadow: 1px 1px 1px #000;
+        text-align: center;
+        font-weight: bold;
+        font-size: small;
+        font-family: "Times New Roman";
+        box-shadow: 0px -3px 3px #000;
+      }
+      
+      #footer a {
+        color: #fff;
+        text-decoration: none;
+      }
+      #footer a:hover {
+        color: #fff;
+        text-decoration: underline;
+      }
+      #socialField ul li {
+        float: left;
+        ;
+      }
+      #socialField ul {
+        list-style: none;
+      }
+      .clear {
+        clear: both;
+      }
+    </style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var uname;
+      var init = function(callback) {
+          $.getJSON("/hashgen", function(json) {
+              window.hash = json.hash;
+              callback();
+          });
+      };
+      var mailAddr = function() {
+          var email = $("#mailAddr").attr('value');
+          if (!confirm("メールアドレス: " + email + " に待ち受け画面のアドレスを送信します。")) {
+              alert("キャンセルしました。");
+              return;
+          }
+          $.getJSON("mailaddr?hash=" + hash + "&email=" + email, function(data) {
+              window.jsonData = data;
+              $("#mailAddr").attr('value', '');
+              $("#mailFormPrepend").prepend("送信済み: " + email + "<br />");
+              alert('メールアドレス: ' + email + ' に待ち受け画面のアドレスを送信しました。');
+          });
+      };
+      $(function() {
+          init(function() {
+              $("#bookmarklet").attr(
+                  "href",
+                  "javascript:(function(){var e=document.createElement(%27img%27);e.src=%27http://link-snap.appspot.com/update?hash=" + window.hash + "&url=%27+encodeURIComponent(location.href);alert('待ち受け画面に ' + location.href + ' を送信しました。\\n\\n(このブックマークレットの SnapID は " + window.hash + " です)');})()"
+              );
+              $(".snapForm").attr(
+                  "href",
+                  "/linksnap?hash=" + window.hash
+              );
+              var phoneAddr = "http://link-snap.appspot.com/phone_frame?hash=" + window.hash;
+              $("#phoneFrame").attr(
+                  "href",
+                  phoneAddr
+              );
+              $("#phoneQR").attr(
+                  "src",
+                  "http://chart.apis.google.com/chart?cht=qr&chs=230x230&chl=" + encodeURIComponent(phoneAddr)
+              );
+              $(".snapId").text(window.hash);
+          });
+      })
+    </script>
+    <script type="text/javascript">
+      var _gaq = _gaq || []; _gaq.push(['_setAccount', 'UA-25179241-1']); _gaq.push(['_trackPageview']);
+      (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="fb-root" style="display: none;"></div>
+    <div id="container">
+      <div id="main">
+        <div class="titleDiv width200">
+          <strong id="title"><a href="/">LinkSnap</a></strong>
+        </div>
+        <br />
+        <br />
+        LinkSnap は PC で見ている Web ページを、スマートフォンへ簡単に送るためのツールです。<br />
+        PC で開いていたページをすぐにスマートフォンで確認したい場合や、複数台のスマートフォンで同時に<br />
+        同じページを確認したい場合などに、ワンクリックで、ページを送ることができます。<br />
+        <br />
+        <a id="bookmarklet" href="#">LinkSnap</a> ← これをブックマークに登録 (ブックマークレット)<br />
+        <br />
+        URL 直接送信フォームは<a class="snapForm" href="#">こちら</a><br />
+        <br />
+        <a id="phoneFrame" href="#">スマフォ側待ち受けページ</a>↓<br />
+        <img id="phoneQR" /><br />
+        <br />
+        <a name="mailForm_"></a>
+        待ち受けページをスマフォに送る<br />
+        <div id="mailForm">
+          <div style="font-size: small;">
+            メールアドレスを入力して、送信ボタンを押してください。待ち受けページのアドレスがメールアドレスに送信されます。
+          </div>
+          <div id="mailFormPrepend" style="font-size: small;"></div>
+          <input type="text" size="50" id="mailAddr"/>
+          <input type="image" onclick="mailAddr()" style="margin-bottom: -8px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAD7ElEQVRIibWWS2xUVRjHf+feO3On8+h7ePShRKKNlUfAGgIx+AoRDUbjwsToxqUb4sIVS40krl0Y3bA1YCRGCLgQDRtBqKUOClWKqR1KZdqZ6b0z0/s657i400rpFFjAf3POzT35/c/5vnO+c4TWmocp67Mf5x64w8EX82LZAODtYYtp1UnChG5dQyZSuNJiQ8JDCKiqFFkzwpYeNSsLQNav4ttZ6tKiy/BQGkpRiiPfja5cAcDfdcFAHkoNqJsZEoYgZ0Jg2BgGZAAhLEIrg92cW2R2YNIcp20EULpVpea6LQxKdYoVj12P53ECA6HAMEEhEICxNFrE30t9AKVAKs1Pl2fxI7kqXAbArqENLDRCzhRmyJgRpoBIgdKgNSwn6ba+1vF/P4w4NXaDaiNk75a+1gYJ02DPcD/JZJKTvxYJA4904g6TJXgTbAgoux4nRouk7CTPbxskYZmtDZY0NNBDf76T05dmmC275JIgFaiYiyaGJ02YKrmcvjTDxt5OnhjoWQVuaQDQmW0j02Zz9kqJi9dKdKdBAFLHbdaGnydKnL1SIp2yac+k1oRDM8lLmncaXJ2eZ8emDoY2rufkpVm+vVDkjZE+FAYGiuO/zCA1vPvsI0zcdNlzpo3cXI7P3zzBc/17ATjw/SvcaBQRQsQrCKXi6vQ8U7MV9m9fz5bBLpSw2Letj460zdFzRX6frnD0XJGOtM2+bX0oYbFlsAuAD14+yPvfHGCsdAGAqr9Af3qANjMdG5yfmCWdELy6s590WwpPxklMWga7h/JsWpfj/LUKm9bl2D2UJ2kZGAK85q587dED7B3ZwztfvcQt8SfjhQJVf4EeuzcO0TObezCtBIsRpJNxNuVtBeSpwS5eONsNU63jrNDszO/A3xFwauxD3F736fFCYXT71q2xQS0QRL7EtgSNYO2E/fbWGAYGUkuUVkitlvszjZsMdz9JtF0yOj520e11R8YLhVELILz1L/9YeQDWRRUcM8OCstkg4mNfIq4/SiuOTx/DCRw86eFJn8VokXrYoB7VQQsGs/3UhmtM/PHXRbfX3W/dmJriyGUXmLzrdsMGqSW+DPCkTyNapOJXcEKXQAb4UUCgAuphg75MH3OPleE6p61P3xsRdyc39QVaaQVAoAKcwCFSERYWCkVDL2Jg0GP3UPbKzF+fxznkCOse2BVSWpEQSVJGG/nUekIVEsowbmvTdCW7qPoLjBcKOIccIb68rTjeS7lPcmteTB+//hFnZn6g7JVXwOGOk7yWmtdqy8m0H27Xm3Ob+do7tgp+3wb30qQz+T9crJzHfYXobg+D9sPtGmgJBxAP+1Wxqlw/aP0HOevTni8qKJMAAAAASUVORK5CYII=" /><br />
+        </div>
+        <br />
+        <span style="font-size: small; color: #999;">
+          現在の SnapID: <span class="snapId"></span>
+        </span>
+        <br />
+        <br />
+        <div id="socialField">
+          <ul>
+            <li><a href="http://twitter.com/share" class="twitter-share-button" data-url="http://link-snap.appspot.com/" data-count="horizontal" data-via="linksnap">Tweet</a></li>
+            <li><fb:like href="http://link-snap.appspot.com/" send="false" layout="button_count" width="90" show_faces="true" action="like" font=""></fb:like></li>
+            <li><g:plusone size="medium" href="http://link-snap.appspot.com/"></g:plusone></li>
+            <li><a href="http://twitter.com/linksnap" class="twitter-follow-button" data-show-count="false">Follow @linksnap</a></li>
+          </ul>
+          <br class="clear"/>
+        </div>
+        <br />
+        <a name="howto"></a>
+        <div class="titleDiv width100">
+          <strong id="title">使い方</strong>
+        </div>
+        <br />
+        <strong>その１</strong><br />
+        1. 上の<a href="/#mailForm_">メールフォーム</a>から待ち受けページアドレスをスマートフォンに送ります。<br />
+        2. 待ち受けページをスマートフォンのブラウザで開きます。<br />
+        3. PC で上のブックマークレットをブックマークします。<br />
+        4. PC で好きなページに行って、上のブックマークレットをクリックします。<br />
+        5. スマートフォンの待ち受けページに PC で見ていたページが送られます。<br />
+        <br />
+        <strong>その２</strong><br />
+        1. 上の<a href="/#mailForm_">メールフォーム</a>から待ち受けページアドレスをスマートフォンに送ります。<br />
+        2. 待ち受けページをスマートフォンのブラウザで開きます。<br />
+        3. PC で <a class="snapForm" href="#">LinkSnap 入力フォーム</a>に行きます。<br />
+        4. 好きなページの URL を上の入力フォームから入力します<br />
+        5. スマートフォンの待ち受けページに PC で見ていたページが送られます。<br />
+        <br />
+        <a name="faq"></a>
+        <div class="titleDiv width100">
+          <strong id="title">FAQ</strong>
+        </div>
+        <br />
+        <i>対応端末について</i><br />
+        <br />
+        Q. iPad などのタブレット端末にもリンクを送ることができますか？<br />
+        A. 出来ます。<br />
+        &nbsp;&nbsp;&nbsp;待ち受けページをタブレット端末で開いた状態でリンクを送ってください。<br />
+        <br />
+        Q. PC 端末にもリンクを送ることができますか？<br />
+        A. 出来ます。<br />
+        &nbsp;&nbsp;&nbsp;待ち受けページを PC で開いた状態でリンクを送ってください。<br />
+        <br />
+        Q. スマートフォン以外の携帯電話にもリンクを送ることが出来ますか？<br />
+        A. 今のところ出来ません。<br />
+        <br />
+        <i>トラブルシューティング</i><br />
+        <br />
+        Q. 全く動かない。<br />
+        A. リンクを送る側と、リンクを受け取る側で SnapID が共通している必要があります。<br />
+        &nbsp;&nbsp;&nbsp; SnapID が一致していることを確認してください。<br />
+        &nbsp;&nbsp;&nbsp; (SnapID はトップページの中ほどに表示されています。<br />
+        &nbsp;&nbsp;&nbsp; SnapID が一致したブックマークと、待ち受けページの間でしか、リンクを渡すことができません。)<br />
+        <br />
+        Q. 一部のページが送れない。<br />
+        A. 待ち受けページに送信することが出来ないページがいくつか存在します。<br />
+        例:<br />
+        &nbsp;&nbsp;&nbsp;http://www.google.co.jp/<br />
+        &nbsp;&nbsp;&nbsp;http://www.twitter.com/<br />
+        &nbsp;&nbsp;&nbsp;http://www.facebook.com/<br />
+        これらのページは今のところ、送ることができません。<br />
+        また、ログインが必要となるようなページも基本的に送ることができません。(ログインページに飛ばされてしまいます。)<br />
+        <br />
+        <i>その他の使い方</i><br />
+        <br />
+        Q. 複数の端末に同時にリンクを送りたい。<br />
+        A. 同一の待ち受けページのアドレスを、複数の端末で同時に開いてください。<br />
+        <br />
+      </div>
+    </div>
+    <div id="footer">
+      COPYRIGHT (C) 2011 <a href="http://zyyx.jp/">ZYYX INC.</a> ALL RIGHTS RESERVED.
+    </div>
+    <div id="debug">
+    </div>
+    <script src="http://connect.facebook.net/en_US/all.js#appId=147278832023084&amp;xfbml=1"></script>
+    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    <script type="text/javascript">
+      (function() {
+          var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true; po.src = 'https://apis.google.com/js/plusone.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+</script>  </body>
+</html>
